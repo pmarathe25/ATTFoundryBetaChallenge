@@ -7,7 +7,12 @@ Group::Group(int id) {
 
 Group::Group(int id, std::vector<int> occupancy) : Group(id) {
     // TODO: save occupancy list in terms of contiguous available storage.
-    availability = occupancy;
+    int index = 0;
+    for (std::vector<int>::iterator it = occupancy.begin(); it != occupancy.end(); ++it) {
+        availability.push_back(*it - index);
+        availability.push_back(-1);
+        index = *it + 1;
+    }
 }
 
 void Group::addServer(Server& toAdd) {

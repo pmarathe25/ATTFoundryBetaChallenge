@@ -32,6 +32,7 @@ void GroupAllocator::allocate(std::map<int, std::vector<int> > unavailableSlots)
 
 void GroupAllocator::display() {
     for (int i = 0; i < numGroups; ++i) {
+        std::cout << "Group " << i << std::endl;
         groups.at(i).display();
     }
 }

@@ -13,8 +13,10 @@ class Group {
         void addServer(Server& toAdd);
         void display();
     private:
+        int findSmallestAvailableSlot(int size);
         int id;
         std::vector<int> availability;
+
 };
 
 #endif

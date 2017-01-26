@@ -6,7 +6,6 @@ Group::Group(int id) {
 }
 
 Group::Group(int id, std::vector<int> occupancy) : Group(id) {
-    // TODO: save occupancy list in terms of contiguous available storage.
     int index = 0;
     for (std::vector<int>::iterator it = occupancy.begin(); it != occupancy.end(); ++it) {
         availability.push_back(*it - index);
@@ -16,11 +15,23 @@ Group::Group(int id, std::vector<int> occupancy) : Group(id) {
 }
 
 void Group::addServer(Server& toAdd) {
+    // TODO: Implement add server - find smallest available spot for the server size and set the appropriate values in the server.
 
 }
 
 void Group::display() {
     for (int i = 0; i < availability.size(); ++i) {
         std::cout << availability.at(i) << std::endl;
+    }
+}
+
+int Group::findSmallestAvailableSlot(int size) {
+    int minSize, slotIndex, index;
+    for (std::vector<int>::iterator it = availability.begin(); it != availability.end(); ++it) {
+        if (*it < minSize && *it >= size) {
+            minSize = *it;
+            slotIndex = index;
+        }
+        index += abs(*it);
     }
 }

@@ -21,7 +21,7 @@ $(BUILDDIR)/Server.o: $(SRCDIR)/Server/Server.cpp $(INCLUDEDIR)/Server/Server.hp
 $(BUILDDIR)/Group.o: $(SRCDIR)/Group/Group.cpp $(INCLUDEDIR)/Group/Group.hpp
 	$(CXX) $(CFLAGS) $(SRCDIR)/Group/Group.cpp -o $(BUILDDIR)/Group.o
 
-$(BUILDDIR)/GroupAllocator.o: $(SRCDIR)/Group/GroupAllocator.cpp $(INCLUDEDIR)/Group/GroupAllocator.hpp
+$(BUILDDIR)/GroupAllocator.o: $(SRCDIR)/Group/GroupAllocator.cpp $(INCLUDEDIR)/Group/GroupAllocator.hpp $(INCLUDEDIR)/Group/Group.hpp
 	$(CXX) $(CFLAGS) $(SRCDIR)/Group/GroupAllocator.cpp -o $(BUILDDIR)/GroupAllocator.o
 
 test: $(TESTDIR)/test

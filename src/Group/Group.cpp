@@ -34,4 +34,5 @@ int Group::findSmallestAvailableSlot(int size) {
         }
         index += abs(*it);
     }
+    return slotIndex;
 }

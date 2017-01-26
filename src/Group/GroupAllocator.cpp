@@ -16,15 +16,13 @@ void GroupAllocator::allocate(std::map<int, std::vector<int> > unavailableSlots)
         rackNumber = i * numRacksPerGroup;
         // Iterate over each group and input a vector of all the unavailable slots in that group.
         for (int j = 0; j < numRacksPerGroup; ++j) {
-            std::cout << "Rack number " << rackNumber << std::endl;
             // Grab the vector of all the unavailableSlots in this rack and iterate through it.
             for (std::vector<int>::iterator it = unavailableSlots.at(rackNumber).begin(); it != unavailableSlots.at(rackNumber).end(); ++it) {
                 // Compute a single number corresponding to the occupied slot number.
-                groupOccupancy.push_back(j * SLOTS_PER_RACK + *it + 1);
-                std::cout << *it << std::endl;
+                groupOccupancy.push_back(j * (SLOTS_PER_RACK + 1) + *it);
             }
             // Mark the end of each rack.
-            groupOccupancy.push_back((j + 1) * SLOTS_PER_RACK);
+            groupOccupancy.push_back((j + 1) * SLOTS_PER_RACK + j);
             ++rackNumber;
         }
         // Group created.

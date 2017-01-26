@@ -6,6 +6,7 @@
 int main() {
     Server test1 = Server(1, 3, 4);
     GroupAllocator allocater = GroupAllocator(3, 3);
+    // Creeate map of unavailable slots.
     std::map<int, std::vector<int> > occupancy;
     occupancy.insert({0, {1, 5}});
     occupancy.insert({1, {0, 3}});

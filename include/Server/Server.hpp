@@ -1,3 +1,6 @@
+#ifndef SERVER_H
+#define SERVER_H
+
 class Server {
     public:
         Server(int id, int size, int capacity);
@@ -12,3 +15,5 @@ class Server {
     private:
         int id, rackNumber, slotNumber, poolNumber, size, capacity;
 };
+
+#endif

@@ -6,9 +6,8 @@ Server::Server(int id, int size, int capacity) {
     this -> capacity = capacity;
 }
 
-void Server::setLocation(int rackNumber, int slotNumber) {
-    this -> rackNumber = rackNumber;
-    this -> slotNumber = slotNumber;
+void Server::setLocation(Location location) {
+    this -> location = location;
 }
 
 void Server::setPool(int poolNumber) {
@@ -17,14 +16,6 @@ void Server::setPool(int poolNumber) {
 
 int Server::getID() {
     return id;
-}
-
-int Server::getRackNumber() {
-    return rackNumber;
-}
-
-int Server::getSlotNumber() {
-    return slotNumber;
 }
 
 int Server::getPoolNumber() {
@@ -37,4 +28,12 @@ int Server::getSize() {
 
 int Server::getCapacity() {
     return capacity;
+}
+
+void Server::display() {
+    std::cout << "========Server ID: " << id << "========" << std::endl;
+    std::cout << "Size: " << size << std::endl;
+    std::cout << "Capacity: " << capacity << std::endl;
+    std::cout << "Pool: " << poolNumber << std::endl;
+    location.display();
 }

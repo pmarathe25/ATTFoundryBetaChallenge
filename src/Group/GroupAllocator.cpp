@@ -1,10 +1,11 @@
 #include "Group/GroupAllocator.hpp"
 #include <iostream>
 
-GroupAllocator::GroupAllocator(int numRacks, int numRacksPerGroup) {
+GroupAllocator::GroupAllocator(int numRacks, int numRacksPerGroup, int goalCapacity) {
     this -> numRacks = numRacks;
     this -> numRacksPerGroup = numRacksPerGroup;
     this -> numGroups = numRacks / numRacksPerGroup;
+    this -> goalCapacity = goalCapacity;
 }
 
 void GroupAllocator::allocate(std::map<int, std::vector<int> > unavailableSlots) {
@@ -26,13 +27,38 @@ void GroupAllocator::allocate(std::map<int, std::vector<int> > unavailableSlots)
             ++rackNumber;
         }
         // Group created.
-        groups.push_back(Group(i, groupOccupancy));
+        groups.push_back(Group(i, goalCapacity, groupOccupancy));
     }
+}
+
+void GroupAllocator::allocatePools(int numPools) {
+    for (int i = 0; i < numGroups; ++i) {
+        groups.at(i).allocatePools(numPools);
+    }
+}
+
+void GroupAllocator::addServer(Server& toAdd) {
+    float maxEfficiency = groups.at(0).getEfficiency();
+    int maxIndex = 0;
+    for (int i = 1; i < groups.size(); ++i) {
+        if (groups.at(i).getEfficiency() > maxEfficiency) {
+            maxEfficiency = groups.at(i).getEfficiency();
+            maxIndex = i;
+        }
+    }
+    groups.at(maxIndex).addServer(toAdd);
 }
 
 void GroupAllocator::display() {
     for (int i = 0; i < numGroups; ++i) {
-        std::cout << "Group " << i << std::endl;
+        std::cout << "====================Group " << i << "====================" << std::endl;
         groups.at(i).display();
+    }
+}
+
+void GroupAllocator::displayServers() {
+    for (int i = 0; i < numGroups; ++i) {
+        std::cout << "====================Group " << i << "====================" << std::endl;
+        groups.at(i).displayServers();
     }
 }

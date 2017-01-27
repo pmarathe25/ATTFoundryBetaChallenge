@@ -1,19 +1,40 @@
 #ifndef SERVER_H
 #define SERVER_H
+#include <iostream>
+
+class Location {
+    public:
+        Location() {}
+        Location(int group, int rack, int slot) {
+            this -> group = group;
+            this -> rack = rack;
+            this -> slot = slot;
+        }
+        void display() {
+            std::cout << "Group Number: " << group << std::endl;
+            std::cout << "Rack Number: " << rack << std::endl;
+            std::cout << "Slot Number: " << slot << std::endl;
+        }
+        int group, rack, slot;
+};
 
 class Server {
     public:
         Server(int id, int size, int capacity);
-        void setLocation(int rackNumber, int slotNumber);
+        void setLocation(Location location);
         void setPool(int poolNumber);
         int getID();
-        int getRackNumber();
-        int getSlotNumber();
         int getPoolNumber();
         int getSize();
         int getCapacity();
+        Location getLocation();
+        void display();
+        bool static serverComparator(Server* a, Server* b) {
+            return a -> getCapacity() > b -> getCapacity();
+        }
     private:
-        int id, rackNumber, slotNumber, poolNumber, size, capacity;
+        int id, poolNumber, size, capacity;
+        Location location;
 };
 
 #endif

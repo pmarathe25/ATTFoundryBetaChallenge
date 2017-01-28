@@ -2,10 +2,14 @@
 #include <algorithm>
 #include "Server/ServerAllocator.hpp"
 
+ServerAllocator::ServerAllocator(Method method) {
+    this -> method = method;
+}
+
 void ServerAllocator::allocateServers() {
     for (std::map<float, std::vector<Server*> >::reverse_iterator serverSet = serversByEfficiency.rbegin(); serverSet != serversByEfficiency.rend(); ++serverSet) {
         for (std::vector<Server*>::iterator server = (serverSet -> second).begin(); server != (serverSet -> second).end(); ++server) {
-            groupAllocator.addServer(**server);
+            groupAllocator.addServer(**server, method);
         }
     }
     groupAllocator.allocatePools(numPools);
@@ -60,7 +64,7 @@ void ServerAllocator::read(const std::string& filename) {
     }
     numGroups = numRacks / numRacksPerGroup;
     groupAllocator = GroupAllocator(numRacks, numRacksPerGroup, numGroups, int(totalCapacity / numGroups));
-    groupAllocator.allocateGroups(occupancy);
+    groupAllocator.allocateGroups(occupancy, method);
     inputFile.close();
 }
 

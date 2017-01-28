@@ -7,7 +7,7 @@
 
 class ServerAllocator {
     public:
-        ServerAllocator() {}
+        ServerAllocator(Method method);
         void allocateServers();
         void displayServers();
         void displayServersByGroup();
@@ -21,6 +21,7 @@ class ServerAllocator {
         std::map<int, std::vector<Server*> > serversByCapacity;
         std::map<int, std::vector<int> > occupancy;
         GroupAllocator groupAllocator;
+        Method method;
         int numRacks, numRacksPerGroup, numGroups, numPools, totalCapacity = 0, minGuaranteedCapacity;
 };
 

@@ -5,12 +5,12 @@
 #include <iostream>
 
 int main() {
-    ServerAllocator serverAllocator = ServerAllocator();
+    ServerAllocator serverAllocator = ServerAllocator(CAPACITY);
     serverAllocator.read("test/input");
     serverAllocator.displayGroups();
     serverAllocator.allocateServers();
     serverAllocator.write("test/output");
-    // serverAllocator.displayServersByGroup();
-    serverAllocator.displayServers();
+    serverAllocator.displayServersByGroup();
+    // serverAllocator.displayServers();
     serverAllocator.displayMinGuaranteedCapacity();
 }

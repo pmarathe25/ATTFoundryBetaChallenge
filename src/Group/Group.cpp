@@ -47,9 +47,14 @@ float Group::getEfficiency() {
     return efficiency;
 }
 
+int Group::getGoalCapacity() {
+    return goalCapacity;
+}
+
 void Group::display() {
     std::cout << "====================Group " << id << "====================" << std::endl;
     std::cout << "Available Spots: " << availableSlots << std::endl;
+    std::cout << "Goal Capacity: " << goalCapacity << std::endl;
     std::cout << "Efficiency: " << efficiency << std::endl;
     for (int i = 0; i < availability.size(); ++i) {
         std::cout << availability.at(i) << std::endl;

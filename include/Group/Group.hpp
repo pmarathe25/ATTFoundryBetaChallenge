@@ -13,11 +13,15 @@ class Group {
         bool addServer(Server& toAdd);
         void allocatePools(int numPools);
         float getEfficiency();
+        int getGoalCapacity();
         void display();
         void displayServers();
         int getPoolCapacity(int pool);
-        bool static groupComparator(Group& a, Group& b) {
+        bool static groupEfficiencyComparator(Group& a, Group& b) {
             return a.getEfficiency() > b.getEfficiency();
+        }
+        bool static groupCapacityComparator(Group& a, Group& b) {
+            return a.getGoalCapacity() > b.getGoalCapacity();
         }
     private:
         std::pair<int, int> findSmallestAvailableSlot(int size);

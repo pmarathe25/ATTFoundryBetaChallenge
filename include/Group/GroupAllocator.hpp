@@ -5,24 +5,24 @@
 #include <vector>
 #include "Group/Group.hpp"
 
-enum method {
+enum Method {
     EFFICIENCY = 0,
     CAPACITY,
-}
+};
 
 class GroupAllocator {
     public:
         GroupAllocator() {}
         GroupAllocator(int numRacks, int numRacksPerGroup, int numGroups, int goalCapacity);
-        void allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots);
+        void allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots, Method method);
         void allocatePools(int numPools);
-        void addServer(Server& toAdd);
+        void addServer(Server& toAdd, Method method);
         void displayGroups();
         void displayServers();
         void calculateTotalPoolCapacity(int numPools);
         int calculateMinGuaranteedCapacity(int numPools);
     private:
-        void sortGroups();
+        void sortGroups(Method method);
         int numRacks, numRacksPerGroup, numGroups, goalCapacity;
         std::vector<Group> groups;
         std::vector<int> totalPoolCapacity;

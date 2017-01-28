@@ -9,7 +9,7 @@ GroupAllocator::GroupAllocator(int numRacks, int numRacksPerGroup, int numGroups
     this -> goalCapacity = goalCapacity;
 }
 
-void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots) {
+void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots, Method method) {
     std::vector<int> groupOccupancy;
     int rackNumber;
     for (int i = 0; i < numGroups; ++i) {
@@ -30,7 +30,7 @@ void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unav
         }
         // Group created.
         groups.push_back(Group(i, goalCapacity, groupOccupancy));
-        sortGroups();
+        sortGroups(method);
     }
 }
 
@@ -40,7 +40,7 @@ void GroupAllocator::allocatePools(int numPools) {
     }
 }
 
-void GroupAllocator::addServer(Server& toAdd) {
+void GroupAllocator::addServer(Server& toAdd, Method method) {
     // Find a place to add the server.
     bool serverAdded = false;
     int groupModified;
@@ -50,10 +50,22 @@ void GroupAllocator::addServer(Server& toAdd) {
     }
     // Moves the group that was just modified.
     int index = 0;
-    for (int i = 0; i < groups.size(); ++i) {
-        if (groups.at(groupModified).getEfficiency() < groups.at(i).getEfficiency() && i != groupModified) {
-            index = i;
-        }
+
+    switch (method) {
+        case EFFICIENCY:
+            for (int i = 0; i < groups.size(); ++i) {
+                if (groups.at(groupModified).getEfficiency() < groups.at(i).getEfficiency() && i != groupModified) {
+                    index = i;
+                }
+            }
+            break;
+        case CAPACITY:
+            for (int i = 0; i < groups.size(); ++i) {
+                if (groups.at(groupModified).getGoalCapacity() < groups.at(i).getGoalCapacity() && i != groupModified) {
+                    index = i;
+                }
+            }
+            break;
     }
     Group temp = groups.at(groupModified);
     groups.erase(groupModified + groups.begin());
@@ -95,6 +107,13 @@ int GroupAllocator::calculateMinGuaranteedCapacity(int numPools) {
     return minGuaranteedCapacity;
 }
 
-void GroupAllocator::sortGroups() {
-    std::sort(groups.begin(), groups.end(), Group::groupComparator);
+void GroupAllocator::sortGroups(Method method) {
+    switch (method) {
+        case EFFICIENCY:
+            std::sort(groups.begin(), groups.end(), Group::groupEfficiencyComparator);
+            break;
+        case CAPACITY:
+            std::sort(groups.begin(), groups.end(), Group::groupCapacityComparator);
+            break;
+    }
 }

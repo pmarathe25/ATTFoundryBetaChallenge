@@ -70,7 +70,6 @@ void ServerAllocator::read(const std::string& filename) {
     inputFile.close();
 }
 
-
 void ServerAllocator::write(const std::string& filename) {
     std::ofstream outputFile(filename);
     for (int i = 0; i < servers.size(); ++i) {

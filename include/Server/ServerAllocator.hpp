@@ -16,6 +16,7 @@ class ServerAllocator {
         void read(const std::string& filename);
         void write(const std::string& filename);
     private:
+        void createMaps();
         std::vector<Server> servers;
         std::map<float, std::vector<Server*> > serversByEfficiency;
         std::map<int, std::vector<Server*> > serversByCapacity;

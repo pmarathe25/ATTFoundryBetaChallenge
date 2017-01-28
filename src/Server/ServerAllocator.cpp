@@ -7,10 +7,22 @@ ServerAllocator::ServerAllocator(Method method) {
 }
 
 void ServerAllocator::allocateServers() {
-    for (std::map<float, std::vector<Server*> >::reverse_iterator serverSet = serversByEfficiency.rbegin(); serverSet != serversByEfficiency.rend(); ++serverSet) {
-        for (std::vector<Server*>::iterator server = (serverSet -> second).begin(); server != (serverSet -> second).end(); ++server) {
-            groupAllocator.addServer(**server, method);
-        }
+    createMaps();
+    switch (method) {
+        case EFFICIENCY:
+            for (std::map<float, std::vector<Server*> >::reverse_iterator serverSet = serversByEfficiency.rbegin(); serverSet != serversByEfficiency.rend(); ++serverSet) {
+                for (std::vector<Server*>::iterator server = (serverSet -> second).begin(); server != (serverSet -> second).end(); ++server) {
+                    groupAllocator.addServer(**server, method);
+                }
+            }
+            break;
+        case CAPACITY:
+            for (std::map<int, std::vector<Server*> >::reverse_iterator serverSet = serversByCapacity.rbegin(); serverSet != serversByCapacity.rend(); ++serverSet) {
+                for (std::vector<Server*>::iterator server = (serverSet -> second).begin(); server != (serverSet -> second).end(); ++server) {
+                    groupAllocator.addServer(**server, method);
+                }
+            }
+            break;
     }
     groupAllocator.allocatePools(numPools);
     minGuaranteedCapacity = groupAllocator.calculateMinGuaranteedCapacity(numPools);
@@ -51,8 +63,27 @@ void ServerAllocator::read(const std::string& filename) {
         inputFile >> size >> capacity;
         totalCapacity += capacity;
         servers.push_back(Server(i, size, capacity));
-        serversByEfficiency[capacity / (float) size].push_back(&servers.back());
-        serversByCapacity[capacity].push_back(&servers.back());
+    }
+    numGroups = numRacks / numRacksPerGroup;
+    groupAllocator = GroupAllocator(numRacks, numRacksPerGroup, numGroups, int(totalCapacity / numGroups));
+    groupAllocator.allocateGroups(occupancy, method);
+    inputFile.close();
+}
+
+
+void ServerAllocator::write(const std::string& filename) {
+    std::ofstream outputFile(filename);
+    for (int i = 0; i < servers.size(); ++i) {
+        outputFile << numRacksPerGroup * servers.at(i).getLocation().group + servers.at(i).getLocation().rack << " " << servers.at(i).getLocation().slot << " " << servers.at(i).getPoolNumber() << std::endl;
+    }
+    outputFile.close();
+}
+
+void ServerAllocator::createMaps() {
+    for (int i = 0; i < servers.size(); ++i) {
+        int capacity = servers.at(i).getCapacity();
+        serversByEfficiency[capacity / (float) servers.at(i).getSize()].push_back(&servers.at(i));
+        serversByCapacity[capacity].push_back(&servers.at(i));
     }
     // Sort servers by efficiency by size.
     for (std::map<float, std::vector<Server*> >::iterator serverSet = serversByEfficiency.begin(); serverSet != serversByEfficiency.end(); ++serverSet) {
@@ -62,16 +93,4 @@ void ServerAllocator::read(const std::string& filename) {
     for (std::map<int, std::vector<Server*> >::iterator serverSet = serversByCapacity.begin(); serverSet != serversByCapacity.end(); ++serverSet) {
         std::sort((serverSet -> second).begin(), (serverSet -> second).end(), Server::serverSizeComparator);
     }
-    numGroups = numRacks / numRacksPerGroup;
-    groupAllocator = GroupAllocator(numRacks, numRacksPerGroup, numGroups, int(totalCapacity / numGroups));
-    groupAllocator.allocateGroups(occupancy, method);
-    inputFile.close();
-}
-
-void ServerAllocator::write(const std::string& filename) {
-    std::ofstream outputFile(filename);
-    for (int i = 0; i < servers.size(); ++i) {
-        outputFile << numRacksPerGroup * servers.at(i).getLocation().group + servers.at(i).getLocation().rack << " " << servers.at(i).getLocation().slot << " " << servers.at(i).getPoolNumber() << std::endl;
-    }
-    outputFile.close();
 }

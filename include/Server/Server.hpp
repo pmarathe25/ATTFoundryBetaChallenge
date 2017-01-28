@@ -20,6 +20,7 @@ class Location {
 
 class Server {
     public:
+        Server() {}
         Server(int id, int size, int capacity);
         void setLocation(Location location);
         void setPool(int poolNumber);

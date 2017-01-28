@@ -7,13 +7,15 @@
 
 class GroupAllocator {
     public:
+        GroupAllocator() {}
         GroupAllocator(int numRacks, int numRacksPerGroup, int goalCapacity);
-        void allocate(std::map<int, std::vector<int> > unavailableSlots);
+        void allocateGroups(std::map<int, std::vector<int> > unavailableSlots);
         void allocatePools(int numPools);
         void addServer(Server& toAdd);
-        void display();
+        void displayGroups();
         void displayServers();
     private:
+        void sortGroups();
         int numRacks, numRacksPerGroup, numGroups, goalCapacity;
         std::vector<Group> groups;
 };

@@ -4,17 +4,20 @@
 #include <utility>
 #include "Server/Server.hpp"
 
-const int SLOTS_PER_RACK = 42;
+const int SLOTS_PER_RACK = 7;
 
 class Group {
     public:
         Group(int id, int goalCapacity);
         Group(int id, int goalCapacity, const std::vector<int>& occupancy);
-        void addServer(Server& toAdd);
+        bool addServer(Server& toAdd);
         void allocatePools(int numPools);
         float getEfficiency();
         void display();
         void displayServers();
+        bool static groupComparator(Group& a, Group& b) {
+            return a.getEfficiency() > b.getEfficiency();
+        }
     private:
         std::pair<int, int> findSmallestAvailableSlot(int size);
         void setAvailabilityList(const std::vector<int>& occupancy);
@@ -24,7 +27,6 @@ class Group {
         std::vector<int> availability;
         std::vector<int> poolCapacities;
         std::vector<Server*> servers;
-
 };
 
 #endif

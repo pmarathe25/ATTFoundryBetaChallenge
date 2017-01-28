@@ -5,6 +5,11 @@
 #include <vector>
 #include "Group/Group.hpp"
 
+enum method {
+    EFFICIENCY = 0,
+    CAPACITY,
+}
+
 class GroupAllocator {
     public:
         GroupAllocator() {}

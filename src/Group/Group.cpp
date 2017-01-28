@@ -72,7 +72,6 @@ int Group::getPoolCapacity(int pool) {
     return poolCapacities.at(pool);
 }
 
-
 std::pair<int, int> Group::findSmallestAvailableSlot(int size) {
     int minSize = INT_MAX, maxSlotIndex = -1, slotIndex = 0, index = -1;
     for (int i = 0; i < availability.size(); ++i) {

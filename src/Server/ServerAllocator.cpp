@@ -81,15 +81,27 @@ void ServerAllocator::write(const std::string& filename) {
 void ServerAllocator::createMaps() {
     for (int i = 0; i < servers.size(); ++i) {
         int capacity = servers.at(i).getCapacity();
-        serversByEfficiency[capacity / (float) servers.at(i).getSize()].push_back(&servers.at(i));
-        serversByCapacity[capacity].push_back(&servers.at(i));
+        switch (method) {
+            case EFFICIENCY:
+                serversByEfficiency[capacity / (float) servers.at(i).getSize()].push_back(&servers.at(i));
+                break;
+            case CAPACITY:
+                serversByCapacity[capacity].push_back(&servers.at(i));
+                break;
+        }
     }
-    // Sort servers by efficiency by size.
-    for (std::map<float, std::vector<Server*> >::iterator serverSet = serversByEfficiency.begin(); serverSet != serversByEfficiency.end(); ++serverSet) {
-        std::sort((serverSet -> second).begin(), (serverSet -> second).end(), Server::serverSizeComparator);
-    }
-    // Sort servers by capacity by size
-    for (std::map<int, std::vector<Server*> >::iterator serverSet = serversByCapacity.begin(); serverSet != serversByCapacity.end(); ++serverSet) {
-        std::sort((serverSet -> second).begin(), (serverSet -> second).end(), Server::serverSizeComparator);
+    switch (method) {
+        case EFFICIENCY:
+            // Sort servers by efficiency by size.
+            for (std::map<float, std::vector<Server*> >::iterator serverSet = serversByEfficiency.begin(); serverSet != serversByEfficiency.end(); ++serverSet) {
+                std::sort((serverSet -> second).begin(), (serverSet -> second).end(), Server::serverSizeComparator);
+            }
+            break;
+        case CAPACITY:
+            // Sort servers by capacity by size
+            for (std::map<int, std::vector<Server*> >::iterator serverSet = serversByCapacity.begin(); serverSet != serversByCapacity.end(); ++serverSet) {
+                std::sort((serverSet -> second).begin(), (serverSet -> second).end(), Server::serverSizeComparator);
+            }
+            break;
     }
 }

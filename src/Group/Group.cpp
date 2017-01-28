@@ -10,7 +10,7 @@ Group::Group(int id, int goalCapacity) {
 
 Group::Group(int id, int goalCapacity, const std::vector<int>& occupancy) : Group(id, goalCapacity) {
     setAvailabilityList(occupancy);
-    efficiency = goalCapacity / (float) availableSlots;
+    efficiency = availableSlots != 0 ? goalCapacity / (float) availableSlots : -INT_MAX;
 }
 
 bool Group::addServer(Server& toAdd) {
@@ -20,7 +20,7 @@ bool Group::addServer(Server& toAdd) {
         availability.at(index.first + 1) -= toAdd.getSize();
         availableSlots -= toAdd.getSize();
         goalCapacity -= toAdd.getCapacity();
-        efficiency = goalCapacity / (float) availableSlots;
+        efficiency = availableSlots != 0 ? goalCapacity / (float) availableSlots : -INT_MAX;
         toAdd.setLocation(Location(id, index.second / (SLOTS_PER_RACK + 1), index.second % (SLOTS_PER_RACK + 1)));
         servers.push_back(&toAdd);
         return true;
@@ -63,6 +63,11 @@ void Group::displayServers() {
     }
 }
 
+int Group::getPoolCapacity(int pool) {
+    return poolCapacities.at(pool);
+}
+
+
 std::pair<int, int> Group::findSmallestAvailableSlot(int size) {
     int minSize = INT_MAX, maxSlotIndex = -1, slotIndex = 0, index = -1;
     for (int i = 0; i < availability.size(); ++i) {
@@ -91,5 +96,5 @@ void Group::setAvailabilityList(const std::vector<int>& occupancy) {
 }
 
 void Group::sortServers() {
-    std::sort(servers.begin(), servers.end(), Server::serverComparator);
+    std::sort(servers.begin(), servers.end(), Server::serverCapacityComparator);
 }

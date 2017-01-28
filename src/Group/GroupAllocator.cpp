@@ -2,14 +2,14 @@
 #include <algorithm>
 #include <iostream>
 
-GroupAllocator::GroupAllocator(int numRacks, int numRacksPerGroup, int goalCapacity) {
+GroupAllocator::GroupAllocator(int numRacks, int numRacksPerGroup, int numGroups, int goalCapacity) {
     this -> numRacks = numRacks;
     this -> numRacksPerGroup = numRacksPerGroup;
-    this -> numGroups = numRacks / numRacksPerGroup;
+    this -> numGroups = numGroups;
     this -> goalCapacity = goalCapacity;
 }
 
-void GroupAllocator::allocateGroups(std::map<int, std::vector<int> > unavailableSlots) {
+void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots) {
     // Assumes the map contains every rack even if it has no unavailable slots.
     std::vector<int> groupOccupancy;
     int rackNumber;
@@ -20,7 +20,7 @@ void GroupAllocator::allocateGroups(std::map<int, std::vector<int> > unavailable
         for (int j = 0; j < numRacksPerGroup; ++j) {
             // Grab the vector of all the unavailableSlots in this rack and iterate through it.
             if (unavailableSlots.count(rackNumber) > 0) {
-                for (std::vector<int>::iterator it = unavailableSlots.at(rackNumber).begin(); it != unavailableSlots.at(rackNumber).end(); ++it) {
+                for (std::vector<int>::const_iterator it = unavailableSlots.at(rackNumber).begin(); it != unavailableSlots.at(rackNumber).end(); ++it) {
                     // Compute a single number corresponding to the occupied slot number.
                     groupOccupancy.push_back(j * (SLOTS_PER_RACK + 1) + *it);
                 }
@@ -71,6 +71,29 @@ void GroupAllocator::displayServers() {
     for (int i = 0; i < numGroups; ++i) {
         groups.at(i).displayServers();
     }
+}
+
+void GroupAllocator::calculateTotalPoolCapacity(int numPools) {
+    totalPoolCapacity = std::vector<int> (numPools);
+    for (int i = 0; i < numGroups; ++i) {
+        for (int j = 0; j < numPools; ++j) {
+            totalPoolCapacity.at(j) += groups.at(i).getPoolCapacity(j);
+        }
+    }
+}
+
+int GroupAllocator::calculateMinGuaranteedCapacity(int numPools) {
+    calculateTotalPoolCapacity(numPools);
+    int minGuaranteedCapacity = totalPoolCapacity.at(0);
+    for (int i = 0; i < numGroups; ++i) {
+        for (int j = 0; j < numPools; ++j) {
+            int candidateCapacity = totalPoolCapacity.at(j) - groups.at(i).getPoolCapacity(j);
+            if (candidateCapacity < minGuaranteedCapacity) {
+                minGuaranteedCapacity = candidateCapacity;
+            }
+        }
+    }
+    return minGuaranteedCapacity;
 }
 
 void GroupAllocator::sortGroups() {

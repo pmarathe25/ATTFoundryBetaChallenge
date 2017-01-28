@@ -4,7 +4,7 @@
 #include <utility>
 #include "Server/Server.hpp"
 
-const int SLOTS_PER_RACK = 7;
+const int SLOTS_PER_RACK = 42;
 
 class Group {
     public:
@@ -15,6 +15,7 @@ class Group {
         float getEfficiency();
         void display();
         void displayServers();
+        int getPoolCapacity(int pool);
         bool static groupComparator(Group& a, Group& b) {
             return a.getEfficiency() > b.getEfficiency();
         }

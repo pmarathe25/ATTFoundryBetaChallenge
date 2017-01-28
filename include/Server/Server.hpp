@@ -29,8 +29,11 @@ class Server {
         int getCapacity();
         Location getLocation();
         void display();
-        bool static serverComparator(Server* a, Server* b) {
+        bool static serverCapacityComparator(Server* a, Server* b) {
             return a -> getCapacity() > b -> getCapacity();
+        }
+        bool static serverSizeComparator(Server* a, Server* b) {
+            return a -> getSize() > b -> getSize();
         }
     private:
         int id, poolNumber, size, capacity;

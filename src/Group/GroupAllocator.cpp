@@ -10,7 +10,6 @@ GroupAllocator::GroupAllocator(int numRacks, int numRacksPerGroup, int numGroups
 }
 
 void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots) {
-    // Assumes the map contains every rack even if it has no unavailable slots.
     std::vector<int> groupOccupancy;
     int rackNumber;
     for (int i = 0; i < numGroups; ++i) {
@@ -18,8 +17,8 @@ void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unav
         rackNumber = i * numRacksPerGroup;
         // Iterate over each group and input a vector of all the unavailable slots in that group.
         for (int j = 0; j < numRacksPerGroup; ++j) {
-            // Grab the vector of all the unavailableSlots in this rack and iterate through it.
             if (unavailableSlots.count(rackNumber) > 0) {
+                // Grab the vector of all the unavailableSlots in this rack and iterate through it.
                 for (std::vector<int>::const_iterator it = unavailableSlots.at(rackNumber).begin(); it != unavailableSlots.at(rackNumber).end(); ++it) {
                     // Compute a single number corresponding to the occupied slot number.
                     groupOccupancy.push_back(j * (SLOTS_PER_RACK + 1) + *it);

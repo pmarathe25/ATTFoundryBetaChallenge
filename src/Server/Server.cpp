@@ -30,6 +30,10 @@ int Server::getCapacity() {
     return capacity;
 }
 
+const Location& Server::getLocation() const {
+    return location;
+}
+
 void Server::display() {
     std::cout << "========Server ID: " << id << "========" << std::endl;
     std::cout << "Size: " << size << std::endl;

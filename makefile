@@ -1,6 +1,6 @@
 BUILDDIR = build/
 INCLUDEDIR = include/
-OBJS = $(BUILDDIR)/Server.o $(BUILDDIR)/Group.o $(BUILDDIR)/GroupAllocator.o  $(BUILDDIR)/ServerAllocator.o
+OBJS = $(BUILDDIR)/Server.o $(BUILDDIR)/Group.o $(BUILDDIR)/GroupAllocator.o $(BUILDDIR)/ServerAllocator.o
 TESTDIR = test/
 TESTOBJS = $(BUILDDIR)/test.o
 SRCDIR = src/

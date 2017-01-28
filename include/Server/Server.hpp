@@ -10,7 +10,7 @@ class Location {
             this -> rack = rack;
             this -> slot = slot;
         }
-        void display() {
+        void display() const {
             std::cout << "Group Number: " << group << std::endl;
             std::cout << "Rack Number: " << rack << std::endl;
             std::cout << "Slot Number: " << slot << std::endl;
@@ -27,7 +27,7 @@ class Server {
         int getPoolNumber();
         int getSize();
         int getCapacity();
-        Location getLocation();
+        const Location& getLocation() const;
         void display();
         bool static serverCapacityComparator(Server* a, Server* b) {
             return a -> getCapacity() > b -> getCapacity();

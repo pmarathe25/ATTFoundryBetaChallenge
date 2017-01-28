@@ -30,6 +30,14 @@ int Server::getCapacity() {
     return capacity;
 }
 
+bool Server::isAllocated() {
+    return allocated;
+}
+
+void Server::markAllocated() {
+    allocated = true;
+}
+
 const Location& Server::getLocation() const {
     return location;
 }

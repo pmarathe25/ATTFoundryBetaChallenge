@@ -23,6 +23,7 @@ bool Group::addServer(Server& toAdd) {
         efficiency = availableSlots != 0 ? goalCapacity / (float) availableSlots : INT_MIN;
         toAdd.setLocation(Location(id, index.second / (SLOTS_PER_RACK + 1), index.second % (SLOTS_PER_RACK + 1)));
         servers.push_back(&toAdd);
+        toAdd.markAllocated();
         return true;
     } else {
         return false;

@@ -43,33 +43,36 @@ void GroupAllocator::allocatePools(int numPools) {
 void GroupAllocator::addServer(Server& toAdd, Method method) {
     // Find a place to add the server.
     bool serverAdded = false;
-    int groupModified;
+    int groupModified = -1;
     for (int i = 0; i < groups.size() && !serverAdded; ++i) {
         serverAdded = groups.at(i).addServer(toAdd);
-        groupModified = i;
+        if (serverAdded) {
+            groupModified = i;
+        }
     }
-    // Moves the group that was just modified.
-    int index = 0;
-
-    switch (method) {
-        case EFFICIENCY:
+    // Moves the group that was just modified (if there was a group modified).
+    if (groupModified != -1) {
+        int index = 0;
+        switch (method) {
+            case EFFICIENCY:
             for (int i = 0; i < groups.size(); ++i) {
                 if (groups.at(groupModified).getEfficiency() < groups.at(i).getEfficiency() && i != groupModified) {
                     index = i;
                 }
             }
             break;
-        case CAPACITY:
+            case CAPACITY:
             for (int i = 0; i < groups.size(); ++i) {
                 if (groups.at(groupModified).getGoalCapacity() < groups.at(i).getGoalCapacity() && i != groupModified) {
                     index = i;
                 }
             }
             break;
+        }
+        Group temp = groups.at(groupModified);
+        groups.erase(groupModified + groups.begin());
+        groups.insert(index + groups.begin(), temp);
     }
-    Group temp = groups.at(groupModified);
-    groups.erase(groupModified + groups.begin());
-    groups.insert(index + groups.begin(), temp);
 }
 
 void GroupAllocator::displayGroups() {

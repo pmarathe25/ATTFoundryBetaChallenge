@@ -73,7 +73,11 @@ void ServerAllocator::read(const std::string& filename) {
 void ServerAllocator::write(const std::string& filename) {
     std::ofstream outputFile(filename);
     for (int i = 0; i < servers.size(); ++i) {
-        outputFile << numRacksPerGroup * servers.at(i).getLocation().group + servers.at(i).getLocation().rack << " " << servers.at(i).getLocation().slot << " " << servers.at(i).getPoolNumber() << std::endl;
+        if (servers.at(i).isAllocated()) {
+            outputFile << numRacksPerGroup * servers.at(i).getLocation().group + servers.at(i).getLocation().rack << " " << servers.at(i).getLocation().slot << " " << servers.at(i).getPoolNumber() << std::endl;
+        } else {
+            outputFile << "x" << std::endl;
+        }
     }
     outputFile.close();
 }

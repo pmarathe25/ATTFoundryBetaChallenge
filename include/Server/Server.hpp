@@ -28,6 +28,8 @@ class Server {
         int getPoolNumber();
         int getSize();
         int getCapacity();
+        bool isAllocated();
+        void markAllocated();
         const Location& getLocation() const;
         void display();
         bool static serverCapacityComparator(Server* a, Server* b) {
@@ -39,6 +41,7 @@ class Server {
     private:
         int id, poolNumber, size, capacity;
         Location location;
+        bool allocated = false;
 };
 
 #endif

@@ -52,11 +52,19 @@ int Group::getGoalCapacity() {
     return goalCapacity;
 }
 
+int Group::getPoolCapacity(int pool) {
+    return poolCapacities.at(pool);
+}
+
 void Group::display() {
     std::cout << "====================Group " << id << "====================" << std::endl;
     std::cout << "Available Spots: " << availableSlots << std::endl;
     std::cout << "Goal Capacity: " << goalCapacity << std::endl;
     std::cout << "Efficiency: " << efficiency << std::endl;
+    std::cout << "Pool Capacities" << std::endl;
+    for (int i = 0; i < poolCapacities.size(); ++i) {
+        std::cout << "Pool " << i << " Capacity: " << poolCapacities.at(i) << std::endl;
+    }
     for (int i = 0; i < availability.size(); ++i) {
         std::cout << availability.at(i) << std::endl;
     }
@@ -67,10 +75,6 @@ void Group::displayServers() {
     for (int i = 0; i < servers.size(); ++i) {
         servers.at(i) -> display();
     }
-}
-
-int Group::getPoolCapacity(int pool) {
-    return poolCapacities.at(pool);
 }
 
 std::pair<int, int> Group::findSmallestAvailableSlot(int size) {

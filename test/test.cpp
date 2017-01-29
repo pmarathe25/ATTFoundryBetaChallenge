@@ -8,10 +8,11 @@ int main() {
     ServerAllocator serverAllocator = ServerAllocator(EFFICIENCY);
     serverAllocator.read("test/testInput.in");
     // serverAllocator.read("test/input");
-    // serverAllocator.displayGroups();
+    serverAllocator.displayGroups(6);
     serverAllocator.allocateServers();
     serverAllocator.displayServer(6771);
     serverAllocator.write("test/testOutput.out");
+    serverAllocator.displayGroups(6);
     // serverAllocator.write("test/output");
     // serverAllocator.displayGroups();
     // serverAllocator.displayServersByGroup();

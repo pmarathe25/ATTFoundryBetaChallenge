@@ -1,16 +1,25 @@
 BUILDDIR = build/
+BINDIR = bin/
 INCLUDEDIR = include/
 OBJS = $(BUILDDIR)/Server.o $(BUILDDIR)/Group.o $(BUILDDIR)/GroupAllocator.o $(BUILDDIR)/ServerAllocator.o
 TESTDIR = test/
 TESTOBJS = $(BUILDDIR)/test.o
+EXECOBJS = $(BUILDDIR)/AllocateServers.o
 SRCDIR = src/
 CXX = g++
 CFLAGS = -fPIC -c -std=c++11 -I$(INCLUDEDIR)
 LFLAGS = -shared
 TESTLFLAGS =
+EXECLFLAGS =
+
+$(BINDIR)/AllocateServers: $(EXECOBJS) $(OBJS)
+	$(CXX) $(EXECLFLAGS) $(EXECOBJS) $(OBJS) -o $(BINDIR)/AllocateServers
 
 $(TESTDIR)/test: $(TESTOBJS) $(OBJS)
 	$(CXX) $(TESTLFLAGS) $(TESTOBJS) $(OBJS) -o $(TESTDIR)/test
+
+$(BUILDDIR)/AllocateServers.o: $(SRCDIR)/AllocateServers.cpp
+	$(CXX) $(CFLAGS) $(SRCDIR)/AllocateServers.cpp -o $(BUILDDIR)/AllocateServers.o
 
 $(BUILDDIR)/test.o: $(TESTDIR)/test.cpp
 	$(CXX) $(CFLAGS) $(TESTDIR)/test.cpp -o $(BUILDDIR)/test.o
@@ -29,6 +38,8 @@ $(BUILDDIR)/ServerAllocator.o: $(SRCDIR)/Server/ServerAllocator.cpp $(INCLUDEDIR
 
 test: $(TESTDIR)/test
 	$(TESTDIR)/test
+
+exec: $(BINDIR)/AllocateServers
 
 clean:
 	rm $(OBJS) $(TESTOBJS)

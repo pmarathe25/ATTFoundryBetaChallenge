@@ -2,7 +2,6 @@
 #include "Group/Group.hpp"
 #include "Group/GroupAllocator.hpp"
 #include "Server/ServerAllocator.hpp"
-#include <iostream>
 
 int main() {
     ServerAllocator serverAllocator = ServerAllocator(EFFICIENCY);

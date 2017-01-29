@@ -30,8 +30,11 @@ void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unav
         }
         // Group created.
         groups.push_back(Group(i, goalCapacity, groupOccupancy));
-        sortGroups(method);
     }
+    for (int i = 0; i < numGroups; ++i) {
+        sortedGroups.push_back(&groups.at(i));
+    }
+    sortGroups(method);
 }
 
 void GroupAllocator::allocatePools(int numPools) {
@@ -44,8 +47,8 @@ void GroupAllocator::addServer(Server& toAdd, Method method) {
     // Find a place to add the server.
     bool serverAdded = false;
     int groupModified = -1;
-    for (int i = 0; i < groups.size() && !serverAdded; ++i) {
-        serverAdded = groups.at(i).addServer(toAdd);
+    for (int i = 0; i < sortedGroups.size() && !serverAdded; ++i) {
+        serverAdded = sortedGroups.at(i) -> addServer(toAdd);
         if (serverAdded) {
             groupModified = i;
         }
@@ -55,32 +58,29 @@ void GroupAllocator::addServer(Server& toAdd, Method method) {
         int index = 0;
         switch (method) {
             case EFFICIENCY:
-            for (int i = 0; i < groups.size(); ++i) {
-                if (groups.at(groupModified).getEfficiency() < groups.at(i).getEfficiency() && i != groupModified) {
+            for (int i = 0; i < sortedGroups.size(); ++i) {
+                if (sortedGroups.at(groupModified) -> getEfficiency() < sortedGroups.at(i) -> getEfficiency() && i != groupModified) {
                     index = i;
                 }
             }
             break;
             case CAPACITY:
             for (int i = 0; i < groups.size(); ++i) {
-                if (groups.at(groupModified).getGoalCapacity() < groups.at(i).getGoalCapacity() && i != groupModified) {
+                if (sortedGroups.at(groupModified) -> getGoalCapacity() < sortedGroups.at(i) -> getGoalCapacity() && i != groupModified) {
                     index = i;
                 }
             }
             break;
         }
-        Group temp = groups.at(groupModified);
-        groups.erase(groupModified + groups.begin());
-        groups.insert(index + groups.begin(), temp);
+        Group* temp = sortedGroups.at(groupModified);
+        sortedGroups.erase(groupModified + sortedGroups.begin());
+        sortedGroups.insert(index + sortedGroups.begin(), temp);
     }
 }
 
 void GroupAllocator::displayGroup(int group) {
-    for (int i = 0; i < numGroups; ++i) {
-        if (groups.at(i).getID() == group) {
-            groups.at(i).display();
-        }
-    }}
+    groups.at(group).display();
+}
 
 void GroupAllocator::displayGroups() {
     for (int i = 0; i < numGroups; ++i) {
@@ -95,11 +95,7 @@ void GroupAllocator::displayServers() {
 }
 
 void GroupAllocator::displayServers(int group) {
-    for (int i = 0; i < numGroups; ++i) {
-        if (groups.at(i).getID() == group) {
-            groups.at(i).displayServers();
-        }
-    }
+    groups.at(group).displayServers();
 }
 
 void GroupAllocator::calculateTotalPoolCapacity(int numPools) {
@@ -128,10 +124,10 @@ int GroupAllocator::calculateMinGuaranteedCapacity(int numPools) {
 void GroupAllocator::sortGroups(Method method) {
     switch (method) {
         case EFFICIENCY:
-            std::sort(groups.begin(), groups.end(), Group::groupEfficiencyComparator);
+            std::sort(sortedGroups.begin(), sortedGroups.end(), Group::groupEfficiencyComparator);
             break;
         case CAPACITY:
-            std::sort(groups.begin(), groups.end(), Group::groupCapacityComparator);
+            std::sort(sortedGroups.begin(), sortedGroups.end(), Group::groupCapacityComparator);
             break;
     }
 }

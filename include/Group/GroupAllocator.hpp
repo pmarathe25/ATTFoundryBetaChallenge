@@ -27,6 +27,7 @@ class GroupAllocator {
         void sortGroups(Method method);
         int numRacks, numRacksPerGroup, numGroups, goalCapacity;
         std::vector<Group> groups;
+        std::vector<Group*> sortedGroups;
         std::vector<int> totalPoolCapacity;
 };
 

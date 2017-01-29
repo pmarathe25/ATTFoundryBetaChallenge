@@ -13,6 +13,7 @@ class ServerAllocator {
         void displayServer(int server);
         void displayServersByGroup();
         void displayServersByGroup(int group);
+        void displayGroup(int group);
         void displayGroups();
         void displayMinGuaranteedCapacity();
         void read(const std::string& filename);

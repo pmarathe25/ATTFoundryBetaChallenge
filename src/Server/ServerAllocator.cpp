@@ -50,6 +50,10 @@ void ServerAllocator::displayServersByGroup(int group) {
     groupAllocator.displayServers(group);
 }
 
+void ServerAllocator::displayGroup(int group) {
+    groupAllocator.displayGroup(group);
+}
+
 void ServerAllocator::displayGroups() {
     groupAllocator.displayGroups();
 }

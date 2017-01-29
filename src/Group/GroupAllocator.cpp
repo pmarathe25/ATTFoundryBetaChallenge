@@ -75,6 +75,13 @@ void GroupAllocator::addServer(Server& toAdd, Method method) {
     }
 }
 
+void GroupAllocator::displayGroup(int group) {
+    for (int i = 0; i < numGroups; ++i) {
+        if (groups.at(i).getID() == group) {
+            groups.at(i).display();
+        }
+    }}
+
 void GroupAllocator::displayGroups() {
     for (int i = 0; i < numGroups; ++i) {
         groups.at(i).display();
@@ -84,6 +91,14 @@ void GroupAllocator::displayGroups() {
 void GroupAllocator::displayServers() {
     for (int i = 0; i < numGroups; ++i) {
         groups.at(i).displayServers();
+    }
+}
+
+void GroupAllocator::displayServers(int group) {
+    for (int i = 0; i < numGroups; ++i) {
+        if (groups.at(i).getID() == group) {
+            groups.at(i).displayServers();
+        }
     }
 }
 

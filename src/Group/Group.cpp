@@ -13,6 +13,10 @@ Group::Group(int id, int goalCapacity, const std::vector<int>& occupancy) : Grou
     efficiency = availableSlots != 0 ? goalCapacity / (float) availableSlots : -INT_MAX;
 }
 
+int Group::getID() {
+    return id;
+}
+
 bool Group::addServer(Server& toAdd) {
     std::pair<int, int> index = findSmallestAvailableSlot(toAdd.getSize());
     if (index.first != -1) {
@@ -20,7 +24,7 @@ bool Group::addServer(Server& toAdd) {
         availability.at(index.first + 1) -= toAdd.getSize();
         availableSlots -= toAdd.getSize();
         goalCapacity -= toAdd.getCapacity();
-        efficiency = availableSlots != 0 ? goalCapacity / (float) availableSlots : INT_MIN;
+        efficiency = availableSlots > 0 ? goalCapacity / (float) availableSlots : INT_MIN;
         toAdd.setLocation(Location(id, index.second / (SLOTS_PER_RACK + 1), index.second % (SLOTS_PER_RACK + 1)));
         servers.push_back(&toAdd);
         toAdd.markAllocated();

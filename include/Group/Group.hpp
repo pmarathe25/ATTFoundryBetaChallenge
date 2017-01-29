@@ -10,6 +10,7 @@ class Group {
     public:
         Group(int id, int goalCapacity);
         Group(int id, int goalCapacity, const std::vector<int>& occupancy);
+        int getID();
         bool addServer(Server& toAdd);
         void allocatePools(int numPools);
         float getEfficiency();

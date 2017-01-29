@@ -17,8 +17,10 @@ class GroupAllocator {
         void allocateGroups(const std::map<int, std::vector<int> >& unavailableSlots, Method method);
         void allocatePools(int numPools);
         void addServer(Server& toAdd, Method method);
+        void displayGroup(int group);
         void displayGroups();
         void displayServers();
+        void displayServers(int group);
         void calculateTotalPoolCapacity(int numPools);
         int calculateMinGuaranteedCapacity(int numPools);
     private:

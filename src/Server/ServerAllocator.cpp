@@ -34,8 +34,20 @@ void ServerAllocator::displayServers() {
     }
 }
 
+void ServerAllocator::displayServer(int server) {
+    if (server < servers.size()) {
+        servers.at(server).display();
+    } else {
+        std::cout << "Server " << server << " does not exist." << std::endl;
+    }
+}
+
 void ServerAllocator::displayServersByGroup() {
     groupAllocator.displayServers();
+}
+
+void ServerAllocator::displayServersByGroup(int group) {
+    groupAllocator.displayServers(group);
 }
 
 void ServerAllocator::displayGroups() {

@@ -10,7 +10,9 @@ class ServerAllocator {
         ServerAllocator(Method method);
         void allocateServers();
         void displayServers();
+        void displayServer(int server);
         void displayServersByGroup();
+        void displayServersByGroup(int group);
         void displayGroups();
         void displayMinGuaranteedCapacity();
         void read(const std::string& filename);

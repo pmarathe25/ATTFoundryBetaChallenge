@@ -34,17 +34,18 @@ bool Group::addServer(Server& toAdd) {
     }
 }
 
-void Group::allocatePools(int numPools) {
+void Group::allocatePools(std::vector<int>& totalPoolCapacity) {
     sortServers();
-    poolCapacities = std::vector<int>(numPools);
+    poolCapacities = std::vector<int>(totalPoolCapacity.size());
     for (std::vector<Server*>::iterator server = servers.begin(); server != servers.end(); ++server) {
-        std::vector<int>::iterator minPoolCapacity = std::min_element(poolCapacities.begin(), poolCapacities.end());
+        std::vector<int>::iterator minPoolCapacity = std::min_element(totalPoolCapacity.begin(), totalPoolCapacity.end());
         // Get index;
-        int minPoolIndex = minPoolCapacity - poolCapacities.begin();
+        int minPoolIndex = minPoolCapacity - totalPoolCapacity.begin();
         // Update server.
         (*server) -> setPool(minPoolIndex);
         // Update pool capacity.
         (*minPoolCapacity) += (*server) -> getCapacity();
+        poolCapacities.at(minPoolIndex) += (*server) -> getCapacity();
     }
 }
 
@@ -65,10 +66,6 @@ void Group::display() {
     std::cout << "Available Spots: " << availableSlots << std::endl;
     std::cout << "Goal Capacity: " << goalCapacity << std::endl;
     std::cout << "Efficiency: " << efficiency << std::endl;
-    std::cout << "Pool Capacities" << std::endl;
-    for (int i = 0; i < poolCapacities.size(); ++i) {
-        std::cout << "Pool " << i << " Capacity: " << poolCapacities.at(i) << std::endl;
-    }
     for (int i = 0; i < availability.size(); ++i) {
         std::cout << availability.at(i) << std::endl;
     }

@@ -17,8 +17,8 @@ void ServerAllocator::allocateServers() {
             }
             break;
         case CAPACITY:
-            for (std::map<int, std::vector<Server*> >::reverse_iterator serverSet = serversByCapacity.rbegin(); serverSet != serversByCapacity.rend(); ++serverSet) {
-                for (std::vector<Server*>::iterator server = (serverSet -> second).begin(); server != (serverSet -> second).end(); ++server) {
+            for (std::map<int, std::vector<Server*> >::iterator serverSet = serversByCapacity.begin(); serverSet != serversByCapacity.end(); ++serverSet) {
+                for (std::vector<Server*>::reverse_iterator server = (serverSet -> second).rbegin(); server != (serverSet -> second).rend(); ++server) {
                     groupAllocator.addServer(**server, method);
                 }
             }

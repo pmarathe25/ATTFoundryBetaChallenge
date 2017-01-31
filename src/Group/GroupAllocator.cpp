@@ -38,8 +38,9 @@ void GroupAllocator::allocateGroups(const std::map<int, std::vector<int> >& unav
 }
 
 void GroupAllocator::allocatePools(int numPools) {
+    totalPoolCapacity = std::vector<int>(numPools);
     for (int i = 0; i < numGroups; ++i) {
-        groups.at(i).allocatePools(numPools);
+        groups.at(i).allocatePools(totalPoolCapacity);
     }
 }
 
@@ -98,17 +99,7 @@ void GroupAllocator::displayServers(int group) {
     groups.at(group).displayServers();
 }
 
-void GroupAllocator::calculateTotalPoolCapacity(int numPools) {
-    totalPoolCapacity = std::vector<int> (numPools);
-    for (int i = 0; i < numGroups; ++i) {
-        for (int j = 0; j < numPools; ++j) {
-            totalPoolCapacity.at(j) += groups.at(i).getPoolCapacity(j);
-        }
-    }
-}
-
 int GroupAllocator::calculateMinGuaranteedCapacity(int numPools) {
-    calculateTotalPoolCapacity(numPools);
     int minGuaranteedCapacity = totalPoolCapacity.at(0);
     for (int i = 0; i < numGroups; ++i) {
         for (int j = 0; j < numPools; ++j) {

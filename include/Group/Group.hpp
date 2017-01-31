@@ -12,7 +12,7 @@ class Group {
         Group(int id, int goalCapacity, const std::vector<int>& occupancy);
         int getID();
         bool addServer(Server& toAdd);
-        void allocatePools(int numPools);
+        void allocatePools(std::vector<int>& totalPoolCapacity);
         float getEfficiency();
         int getGoalCapacity();
         void display();
